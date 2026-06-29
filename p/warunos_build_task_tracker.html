@@ -1,0 +1,268 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.tracker { padding: 1rem 0; }
+.week-header {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  margin: 1.5rem 0 0.75rem;
+  padding-bottom: 6px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+.week-header:first-child { margin-top: 0; }
+.task-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 12px;
+  align-items: start;
+}
+.task-card:hover { border-color: var(--color-border-secondary); }
+.task-card.done { opacity: 0.55; }
+.task-card.done .task-title { text-decoration: line-through; }
+.checkbox {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-border-secondary);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: all 0.15s;
+}
+.task-card.done .checkbox {
+  background: #1D9E75;
+  border-color: #1D9E75;
+  color: white;
+  font-size: 11px;
+}
+.task-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); line-height: 1.4; }
+.task-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; line-height: 1.5; }
+.task-meta { display: flex; gap: 6px; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
+.badge {
+  font-size: 11px; font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.badge-page { background: #E1F5EE; color: #0F6E56; }
+.badge-ai { background: #EEEDFE; color: #3C3489; }
+.badge-db { background: #FAEEDA; color: #633806; }
+.badge-infra { background: #E6F1FB; color: #0C447C; }
+.ai-tip {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-left: 3px solid #7F77DD;
+  border-radius: var(--border-radius-md);
+  padding: 10px 14px;
+  margin: 10px 0 16px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  display: none;
+}
+.ai-tip.show { display: block; }
+.tip-label { font-size: 11px; font-weight: 500; color: #7F77DD; margin-bottom: 4px; }
+.progress-bar-wrap {
+  background: var(--color-background-secondary);
+  border-radius: 20px;
+  height: 6px;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: #1D9E75;
+  border-radius: 20px;
+  transition: width 0.4s;
+}
+.progress-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 1rem; }
+.progress-label span { font-weight: 500; color: var(--color-text-primary); }
+</style>
+
+<div class="tracker">
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="progress-label" id="prog-label"><span id="prog-count">0</span> of <span id="prog-total">0</span> tasks done</div>
+
+  <div class="week-header">Week 1 — Core (Kasir, Stock, Auth)</div>
+
+  <div class="task-card" onclick="toggle(this,0)">
+    <div class="checkbox" id="cb0"></div>
+    <div>
+      <div class="task-title">Set up Supabase project & run schema SQL</div>
+      <div class="task-sub">Create project on supabase.com → go to SQL Editor → paste the full schema from Section 6 → click Run. Check the Table Editor to confirm all 7 tables appear.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-db">Database</span></div>
+  </div>
+  <div class="ai-tip" id="tip0"><div class="tip-label">AI tip</div>Paste the entire schema SQL into Claude and say: "Review this Supabase schema. Are there any missing indexes, naming inconsistencies, or relationships I should add for a POS app?" — it will catch things like missing foreign key indexes.</div>
+
+  <div class="task-card" onclick="toggle(this,1)">
+    <div class="checkbox" id="cb1"></div>
+    <div>
+      <div class="task-title">Scaffold React + Vite + Tailwind project</div>
+      <div class="task-sub">Run: npm create vite@latest warunos -- --template react → cd warunos → npm install → install Tailwind (npm i -D tailwindcss postcss autoprefixer → npx tailwindcss init -p). Create the folder structure from Section 10.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-infra">Setup</span></div>
+  </div>
+  <div class="ai-tip" id="tip1"><div class="tip-label">AI tip</div>Ask Claude: "Give me a complete tailwind.config.js and index.css setup for a mobile-first React app with this color scheme: primary green #1D9E75." It will output ready-to-paste config.</div>
+
+  <div class="task-card" onclick="toggle(this,2)">
+    <div class="checkbox" id="cb2"></div>
+    <div>
+      <div class="task-title">Build /login and /register pages</div>
+      <div class="task-sub">Use Supabase Auth (supabase.auth.signInWithPassword & signUp). Register page includes business_type selector (retail/ecommerce/service/food). Save owner profile to owners table after signup.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-page">Page</span></div>
+  </div>
+  <div class="ai-tip" id="tip2"><div class="tip-label">AI tip</div>Ask Claude: "Write a React login page using @supabase/supabase-js with signInWithPassword. Use Tailwind. Show a loading spinner on submit and display the error message from Supabase in red below the form."</div>
+
+  <div class="task-card" onclick="toggle(this,3)">
+    <div class="checkbox" id="cb3"></div>
+    <div>
+      <div class="task-title">Build /kasir (POS) page</div>
+      <div class="task-sub">Grid of product cards (pulled from Supabase). Tap to add to cart. Cart sidebar shows items, quantities, subtotal. Checkout button: writes to transactions + transaction_items + decrements stock. Target: under 10 seconds per transaction.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-page">Page</span></div>
+  </div>
+  <div class="ai-tip" id="tip3"><div class="tip-label">AI tip</div>Ask Claude: "Write a React component ProductGrid that fetches products from Supabase for owner_id X and renders them as tappable cards. On tap, call an onAddToCart(product) prop. Use Tailwind for mobile layout (2 columns)."</div>
+
+  <div class="task-card" onclick="toggle(this,4)">
+    <div class="checkbox" id="cb4"></div>
+    <div>
+      <div class="task-title">Build /stock page</div>
+      <div class="task-sub">List all products with current stock, edit stock inline, add new product form (name, price, stock, expiry_date). Highlight products with stock &lt; 5 in red. This feeds the AI low-stock alert later.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-page">Page</span></div>
+  </div>
+  <div class="ai-tip" id="tip4"><div class="tip-label">AI tip</div>Ask Claude: "Write a Supabase query to fetch all products for an owner, ordered by stock ascending, and mark items as low_stock if stock &lt; 5 or expiry_date is within 7 days." It will give you the exact SQL or JS query.</div>
+
+  <div class="task-card" onclick="toggle(this,5)">
+    <div class="checkbox" id="cb5"></div>
+    <div>
+      <div class="task-title">Build /dashboard home page</div>
+      <div class="task-sub">Show: today's revenue (sum of transactions.total for today), top 3 products sold today, low-stock alert count, and quick action buttons (Kasir, Stock, Pembukuan). Use Recharts for a simple daily revenue bar chart.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-page">Page</span></div>
+  </div>
+  <div class="ai-tip" id="tip5"><div class="tip-label">AI tip</div>Ask Claude: "Write a Supabase SQL query to get today's total revenue, grouped by hour, for owner_id X. Then show me how to render this as a Recharts BarChart in React."</div>
+
+  <div class="week-header">Week 2 — AI features, Booking, Polish</div>
+
+  <div class="task-card" onclick="toggle(this,6)">
+    <div class="checkbox" id="cb6"></div>
+    <div>
+      <div class="task-title">Integrate Claude API — pembukuan summary</div>
+      <div class="task-sub">Create src/lib/claude.js. Use the prompt from Section 8.2. Fetch today's transactions from Supabase, pass to Claude, display the plain Bahasa Indonesia summary on /pembukuan. Add graceful fallback if API key is missing.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-ai">AI</span></div>
+  </div>
+  <div class="ai-tip" id="tip6"><div class="tip-label">AI tip</div>Ask Claude: "Write a claude.js wrapper function getPembukuanSummary(transactions) that calls the Anthropic API using fetch (not the SDK), returns the text response, and handles errors gracefully by returning null." — use the exact prompt from your brief Section 8.2.</div>
+
+  <div class="task-card" onclick="toggle(this,7)">
+    <div class="checkbox" id="cb7"></div>
+    <div>
+      <div class="task-title">Integrate Claude API — low-stock alerts</div>
+      <div class="task-sub">On the dashboard/stock page, when stock &lt; 5, call the Section 8.3 prompt. Display a 2-sentence AI warning card per low-stock item. Only trigger if &gt; 0 low-stock items exist to avoid wasted API calls.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-ai">AI</span></div>
+  </div>
+  <div class="ai-tip" id="tip7"><div class="tip-label">AI tip</div>Ask Claude: "How do I batch multiple low-stock items into one Claude API call instead of one call per item? Rewrite the Section 8.3 prompt to handle an array and return an array of alerts." — saves API costs and is faster.</div>
+
+  <div class="task-card" onclick="toggle(this,8)">
+    <div class="checkbox" id="cb8"></div>
+    <div>
+      <div class="task-title">Build /ai-forecast page (food segment)</div>
+      <div class="task-sub">Use prompt from Section 8.1. Query last 7 days of transaction_items grouped by product. Pass JSON to Claude. Render the top_items and shopping_suggestions as cards. Show the summary text prominently.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-ai">AI</span></div>
+  </div>
+  <div class="ai-tip" id="tip8"><div class="tip-label">AI tip</div>Ask Claude: "Write the Supabase query to get total quantity sold per product for the last 7 days for owner_id X, formatted as [{name, qty_by_day: [mon,tue,...]}] so I can pass it to the demand forecast prompt."</div>
+
+  <div class="task-card" onclick="toggle(this,9)">
+    <div class="checkbox" id="cb9"></div>
+    <div>
+      <div class="task-title">Build /bookings page + WhatsApp reminder</div>
+      <div class="task-sub">Calendar view (use date-fns for date logic). Add booking form: customer, service name, datetime. Store in bookings table. For the demo, mock the WhatsApp reminder as a preview modal (show the message text + phone number) — integrate Fonnte only if time allows.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-page">Page</span></div>
+  </div>
+  <div class="ai-tip" id="tip9"><div class="tip-label">AI tip</div>Ask Claude: "Write a React weekly calendar component using date-fns that shows bookings from an array of {service_name, scheduled_at, customer_name} objects. Mobile-friendly, show one row per day with time slots."</div>
+
+  <div class="task-card" onclick="toggle(this,10)">
+    <div class="checkbox" id="cb10"></div>
+    <div>
+      <div class="task-title">Build /customers page — loyalty punches</div>
+      <div class="task-sub">List customers (from customers table). Each customer card shows name, visit_count, loyalty_punches. Add a "Punch" button that increments loyalty_punches in Supabase. Add new customer form. This is the CRM for the demo.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-page">Page</span></div>
+  </div>
+  <div class="ai-tip" id="tip10"><div class="tip-label">AI tip</div>Ask Claude: "Write a Supabase RPC or update query to atomically increment loyalty_punches by 1 for customer_id X, and return the new value." — using .rpc() or .update() with .select() is safer than read-then-write.</div>
+
+  <div class="task-card" onclick="toggle(this,11)">
+    <div class="checkbox" id="cb11"></div>
+    <div>
+      <div class="task-title">Build /orders page — unified order inbox</div>
+      <div class="task-sub">Manual order entry form (customer name, phone, source, notes, total). Order list with status badges (pending/processing/done/cancelled). Tap status to cycle through. Filter by status. This is the e-commerce chaos → order flow demo.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-page">Page</span></div>
+  </div>
+  <div class="ai-tip" id="tip11"><div class="tip-label">AI tip</div>Ask Claude: "Write a React OrderCard component that shows order info and a status selector (pending/processing/done/cancelled) using a dropdown. On change, update the orders table in Supabase with the new status."</div>
+
+  <div class="task-card" onclick="toggle(this,12)">
+    <div class="checkbox" id="cb12"></div>
+    <div>
+      <div class="task-title">Add PWA config (installable on Android)</div>
+      <div class="task-sub">Install vite-plugin-pwa. Copy the exact config from Section 13 into vite.config.js. Create 192px and 512px icon PNGs in public/icons/. Test: npm run build → npm run preview → open on Android Chrome → "Add to Home Screen" should appear.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-infra">Infra</span></div>
+  </div>
+  <div class="ai-tip" id="tip12"><div class="tip-label">AI tip</div>Ask Claude: "Generate a simple WarungOS icon as SVG — green (#1D9E75) background, white shopping bag or store outline, 512x512." Then convert it to PNG using an online tool or ask Claude for a Node script to do it with sharp.</div>
+
+  <div class="task-card" onclick="toggle(this,13)">
+    <div class="checkbox" id="cb13"></div>
+    <div>
+      <div class="task-title">Deploy to Vercel + rehearse demo script</div>
+      <div class="task-sub">Push to GitHub → connect to Vercel → add all VITE_ env vars from Section 11 in Vercel dashboard → deploy. Then run through the 8-step demo script from Section 14 at least twice. Time each segment. The PWA install moment needs to work live on stage.</div>
+    </div>
+    <div class="task-meta"><span class="badge badge-infra">Deploy</span></div>
+  </div>
+  <div class="ai-tip" id="tip13"><div class="tip-label">AI tip</div>Ask Claude: "I'm presenting WarungOS at a hackathon in 8 minutes. Write a crisp Bahasa Indonesia script for each of these demo steps: [paste Section 14]. Make it sound natural, not rehearsed."</div>
+</div>
+
+<script>
+const total = 14;
+const done = new Set();
+
+function toggle(card, idx) {
+  if (done.has(idx)) {
+    done.delete(idx);
+    card.classList.remove('done');
+    document.getElementById('cb'+idx).textContent = '';
+    document.getElementById('tip'+idx).classList.remove('show');
+  } else {
+    done.add(idx);
+    card.classList.add('done');
+    document.getElementById('cb'+idx).textContent = '✓';
+    document.getElementById('tip'+idx).classList.add('show');
+  }
+  updateProgress();
+}
+
+function updateProgress() {
+  const n = done.size;
+  document.getElementById('prog-fill').style.width = (n/total*100)+'%';
+  document.getElementById('prog-count').textContent = n;
+  document.getElementById('prog-total').textContent = total;
+}
+
+updateProgress();
+</script>

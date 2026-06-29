@@ -1,0 +1,98 @@
+/* Font import */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono&display=swap');
+
+@import "tailwindcss";
+
+@source "./src/**/*.{js,jsx,ts,tsx}";
+
+@theme {
+  /* Colors - primary */
+  --color-primary-50:  #e8f8f2;
+  --color-primary-100: #c5eee0;
+  --color-primary-200: #9ee3cc;
+  --color-primary-300: #6fd8b7;
+  --color-primary-400: #48cfa6;
+  --color-primary-500: #1D9E75;
+  --color-primary-600: #178f68;
+  --color-primary-700: #107a59;
+  --color-primary-800: #096549;
+  --color-primary-900: #044f39;
+  --color-primary-950: #012f21;
+
+  /* Colors - neutral */
+  --color-neutral-50:  #f7f8f7;
+  --color-neutral-100: #eef0ee;
+  --color-neutral-200: #d9ddd9;
+  --color-neutral-300: #b8bfb8;
+  --color-neutral-400: #909990;
+  --color-neutral-500: #6c756c;
+  --color-neutral-600: #545d54;
+  --color-neutral-700: #424842;
+  --color-neutral-800: #343934;
+  --color-neutral-900: #272b27;
+  --color-neutral-950: #161916;
+
+  /* Colors - danger */
+  --color-danger-50:  #fff1f1;
+  --color-danger-100: #ffe0e0;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+
+  /* Colors - warning */
+  --color-warning-50:  #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+
+  /* Colors - success */
+  --color-success-50:  #e8f8f2;
+  --color-success-500: #1D9E75;
+  --color-success-600: #178f68;
+
+  /* Font families */
+  --font-sans:    "'Plus Jakarta Sans'", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "'Plus Jakarta Sans'", ui-sans-serif, sans-serif;
+  --font-mono:    "'JetBrains Mono'", ui-monospace, monospace;
+
+  /* Font sizes */
+  --font-size-2xs: 0.625rem;
+
+  /* Border radius */
+  --radius-4xl: 2rem;
+
+  /* Box shadows */
+  --shadow-soft-sm: 0 1px 3px 0 rgba(0,0,0,0.06), 0 1px 2px -1px rgba(0,0,0,0.06);
+  --shadow-soft:    0 4px 12px 0 rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.06);
+  --shadow-soft-lg: 0 10px 32px 0 rgba(0,0,0,0.10), 0 4px 8px -4px rgba(0,0,0,0.06);
+  --shadow-glow-primary: 0 0 20px 0 rgba(29,158,117,0.35);
+
+  /* Breakpoints */
+  --breakpoint-xs: 375px;
+
+  /* Spacing */
+  --spacing-safe-bottom: env(safe-area-inset-bottom);
+  --spacing-safe-top:    env(safe-area-inset-top);
+
+  /* Animations */
+  --animate-spin-slow:    spin 1.5s linear infinite;
+  --animate-fade-in:      fadeIn 0.3s ease-out forwards;
+  --animate-slide-up:     slideUp 0.35s ease-out forwards;
+  --animate-pulse-subtle: pulseSubtle 2s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slideUp {
+  0%   { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseSubtle {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
+}
+
